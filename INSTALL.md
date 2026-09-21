@@ -32,6 +32,10 @@
 - 皮肤激活标志：`body[data-dsh-air]`
 - 皮肤清单：`skin.json`（皮肤选择器据此发现/预览）
 - 当前版本：**v0.2.5**
+- **推荐环境：[DSH-Desktop-EAC](https://github.com/DSH-EAC/DSH-Desktop-EAC)**
+  —— DeepSeek Harness 的桌面端（EAC = *Embracing All Creation*「揽尽万象」，自带 Node.js 运行时、
+  一键启动）。**本皮肤就是在它上面开发与测试的**，下文也以它为例；
+  纯网页版 `dsh web` 与其它桌面端**同样支持**（安装脚本会自动判定环境与 profile）。
 
 ### 拿到包先跑这一条（不用装、不用看图，几秒）
 

@@ -26,6 +26,10 @@
 - **修复**：① 深色配色块**自己也声明** `--dsw-alias-bg-base:transparent!important`（权重升到 0-2-1，注定赢）；
   ② 浅色块那条也补上 `!important`。两处都在 → 冷启动 / 热重载结果一致。
 - **自检**：`check-release.mjs` 新增 2 条断言（深色块必须自己声明 + 两处都要带 `!important`）→ 39/39 变 **41/41**。
+- **文档**：README / INSTALL / INSTALL-MANUAL / INSTALL-AI / AGENTS 全部补上**推荐环境
+  [DSH-Desktop-EAC](https://github.com/DSH-EAC/DSH-Desktop-EAC)**（DeepSeek Harness 的桌面端，
+  EAC = *Embracing All Creation*「揽尽万象」；本皮肤的开发与测试环境）。其它桌面端与纯网页版照旧支持，
+  安装脚本仍然不假定环境。
 
 ### 排错记录（留给下一位维护者 · 之二）
 

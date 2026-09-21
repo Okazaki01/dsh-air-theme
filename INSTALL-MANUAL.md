@@ -2,6 +2,9 @@
 
 > 不需要懂电脑，不需要装任何东西。全程 4 步，约 2 分钟。
 > 当前版本 **v0.2.5**。
+> **推荐环境：[DSH-Desktop-EAC](https://github.com/DSH-EAC/DSH-Desktop-EAC)** —— DeepSeek Harness 的桌面端
+> （EAC = *Embracing All Creation*「揽尽万象」，自带 Node.js 运行时、一键启动）。本皮肤就是在它上面
+> 开发与测试的，用它的体验最省事；纯网页版 `dsh web` 与其它桌面端也都能装（见文末）。
 
 ---
 
@@ -62,9 +65,12 @@
 
 | 你的情况 | 装法 | 生效 |
 | --- | --- | --- |
-| EAC 桌面端 | 双击 `安装.bat` | 完全退出 EAC（含托盘）再打开 |
+| **EAC 桌面端（推荐）** | 双击 `安装.bat` | 完全退出 EAC（含托盘）再打开 |
 | 纯网页版（自己跑 `dsh web`） | 命令行里 `node scripts/install.mjs --profile web` | 关掉 `dsh web` 重新跑一次，再刷新浏览器页面 |
 | 别的桌面端 | `node scripts/install.mjs --profile <它的profile名>` | 重启那个客户端 |
+
+> 还想更省事的话，推荐直接用 **[DSH-Desktop-EAC](https://github.com/DSH-EAC/DSH-Desktop-EAC)**
+> （DSH 官方桌面端，自带 Node 运行时、一键启动，上表第一行就是它）。
 
 - **不知道 profile 叫什么**：跑 `node scripts/doctor.mjs`，它会列出来并标出正在跑的是哪个。
 - **没有 Node.js**：先装一个（nodejs.org，选 LTS 一路下一步），或者找会用命令行的人帮你跑一次。

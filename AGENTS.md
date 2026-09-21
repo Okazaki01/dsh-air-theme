@@ -22,9 +22,13 @@ node scripts/check-anchors.mjs   # 对着已装内核判锚点死活，退出码
 `--profile` 参数 → `DSH_DESKTOP_PROFILE` 环境变量 → **正在运行的 dsh 进程命令行** →
 profiles 下唯一的目录 → 常见名兜底；判不出来就列候选并要求显式指定。
 
+**推荐环境：[DSH-Desktop-EAC](https://github.com/DSH-EAC/DSH-Desktop-EAC)** —— DeepSeek Harness 的桌面端
+（EAC = *Embracing All Creation*「揽尽万象」，自带 Node.js 运行时、一键启动）。**本皮肤就是在它上面开发与
+测试的**，下表第一行就是它。给别人介绍 / 写说明时优先推荐它；但**代码与脚本仍必须假定"不一定是 EAC"**。
+
 | 环境 | 安装 | 生效 |
 | --- | --- | --- |
-| EAC 桌面端 | `node scripts/install.mjs` / 双击 `安装.bat` | 完全退出（含托盘）再打开 |
+| **EAC 桌面端（推荐）** | `node scripts/install.mjs` / 双击 `安装.bat` | 完全退出（含托盘）再打开 |
 | 纯网页版 `dsh web` | `node scripts/install.mjs --profile web` | 结束并重跑 `dsh web`，再刷新页面 |
 | 其它桌面端 | `node scripts/install.mjs --profile <名>` | 重启该客户端 |
 | 桌面端目录不认识 | 追加 `--eac-root "D:\目录"` | 重启该客户端 |

@@ -87,6 +87,10 @@
 **交给 AI 安装**：把本包目录交给任意 AI 模型，让它读包内 **`INSTALL.md`**（面向 AI 的完整
 安装引导与注意事项）或 **`AGENTS.md`**（30 秒执行清单）照做即可。核心两步：
 
+> **推荐环境：[DSH-Desktop-EAC](https://github.com/DSH-EAC/DSH-Desktop-EAC)**（DeepSeek Harness 桌面端，
+> EAC = *Embracing All Creation*「揽尽万象」，自带 Node.js 运行时、一键启动）。本节与下文的操作示例都以它为例；
+> 纯网页版 `dsh web` 与其它桌面端**同样支持**，安装脚本会自动判定 profile。
+
 ```bash
 node scripts/check-release.mjs   # 先确认包是好的：41 项必须全 OK
 node scripts/install.mjs         # 幂等；自动探测 EAC 与 profile 并同步三处副本
