@@ -4,11 +4,14 @@
 支持皮肤热切换，**不改动任何原生功能与按钮行为**（100% 保留原版窗口布局与按钮行为）。
 
 - **当前版本 v0.2.5** ｜ 下载：**[Releases](https://github.com/qq2992254255-oss/dsh-air-theme/releases/latest)**
+- **推荐环境：[DSH-Desktop-EAC](https://github.com/DSH-EAC/DSH-Desktop-EAC)** —— DeepSeek Harness 的桌面端
+  （EAC = *Embracing All Creation*「揽尽万象」，自带 Node.js 运行时、一键启动）。
+  **本皮肤就是在它上面开发与测试的**，用它的体验最省事。
 - **反馈邮箱：qq2992254255@gmail.com**（发现 bug 或想提建议，欢迎直接发邮件）
 - 安装：解压后双击 `安装.bat`，或 `node scripts/install.mjs`（自动识别环境与 profile）；
   装完**完全退出客户端再打开**（首次新增皮肤行时，刷新页面不够）
 - 与启动器无关：只要求「装进某个 profile + 该 profile 有启用行 + 宿主重启过」
-  —— 桌面端 EAC / 纯网页版 `dsh web` / 其它桌面端都能用
+  —— 推荐搭配上面的 **EAC 桌面端**，纯网页版 `dsh web` 与其它桌面端也都能用
 
 ## 预览
 
