@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 40">
+  <!-- horizontal gold ornament strip: double line + diamond beads + small curls (tiles horizontally) -->
+  <defs>
+    <linearGradient id="g" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#b8862f"/>
+      <stop offset="0.5" stop-color="#ffd98a"/>
+      <stop offset="1" stop-color="#b8862f"/>
+    </linearGradient>
+  </defs>
+  <line x1="0" y1="10" x2="400" y2="10" stroke="url(#g)" stroke-width="2"/>
+  <line x1="0" y1="30" x2="400" y2="30" stroke="url(#g)" stroke-width="2"/>
+  <!-- beads every 40px -->
+  <g fill="#ffe9a8" stroke="#b8862f" stroke-width="1.2">
+    <rect x="14" y="16" width="8" height="8" transform="rotate(45 18 20)"/>
+    <rect x="54" y="16" width="8" height="8" transform="rotate(45 58 20)"/>
+    <rect x="94" y="16" width="8" height="8" transform="rotate(45 98 20)"/>
+    <rect x="134" y="16" width="8" height="8" transform="rotate(45 138 20)"/>
+    <rect x="174" y="16" width="8" height="8" transform="rotate(45 178 20)"/>
+    <rect x="214" y="16" width="8" height="8" transform="rotate(45 218 20)"/>
+    <rect x="254" y="16" width="8" height="8" transform="rotate(45 258 20)"/>
+    <rect x="294" y="16" width="8" height="8" transform="rotate(45 298 20)"/>
+    <rect x="334" y="16" width="8" height="8" transform="rotate(45 338 20)"/>
+    <rect x="374" y="16" width="8" height="8" transform="rotate(45 378 20)"/>
+  </g>
+  <!-- small curls between beads -->
+  <g fill="none" stroke="#d9a441" stroke-width="1.4">
+    <path d="M32 20 C 36 24 40 24 44 20" />
+    <path d="M72 20 C 76 24 80 24 84 20" />
+    <path d="M112 20 C 116 24 120 24 124 20" />
+    <path d="M152 20 C 156 24 160 24 164 20" />
+    <path d="M192 20 C 196 24 200 24 204 20" />
+    <path d="M232 20 C 236 24 240 24 244 20" />
+    <path d="M272 20 C 276 24 280 24 284 20" />
+    <path d="M312 20 C 316 24 320 24 324 20" />
+    <path d="M352 20 C 356 24 360 24 364 20" />
+  </g>
+</svg>

@@ -1,0 +1,8 @@
+# 安装脚本在本地生成的副本指纹（每台机器不同，不应入库）
+.eac-copy-stamp.json
+
+# 编辑器 / 系统杂物
+*.log
+Thumbs.db
+.DS_Store
+desktop.ini

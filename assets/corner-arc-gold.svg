@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  corner-arc-gold.svg — quarter-ring corner ornament that hugs the input card's
+  24px rounded corner from the outside. Inner radius 24 (matches the card's
+  border-radius), outer radius 40, band thickness 16. The arc is centred on the
+  card's corner arc centre, so its inner edge exactly traces the card's rounded
+  corner — zero intrusion into the card. Beads at both ends + the 45° midpoint.
+  viewBox 0 0 40 40; place with the box's bottom-right corner ON the card corner
+  (top/left -16px) and rotate 0/90/180/270 for the four corners.
+-->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40">
+  <defs>
+    <linearGradient id="g" x1="0" y1="40" x2="40" y2="0" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#fff0bd"/>
+      <stop offset=".45" stop-color="#f6c04e"/>
+      <stop offset=".8" stop-color="#e0a02f"/>
+      <stop offset="1" stop-color="#c9861e"/>
+    </linearGradient>
+  </defs>
+  <!-- main gold band: centred at radius 32, width 16 -> band from radius 24 to 40 -->
+  <path d="M8,40 A32,32 0 0 1 40,8" fill="none" stroke="url(#g)" stroke-width="16" stroke-linecap="round" opacity=".95"/>
+  <!-- inner highlight line for depth -->
+  <path d="M12,40 A28,28 0 0 1 40,12" fill="none" stroke="rgba(255,255,255,.6)" stroke-width="2.4" stroke-linecap="round" opacity=".75"/>
+  <!-- end beads -->
+  <circle cx="8" cy="40" r="2.6" fill="#fff3c4"/>
+  <circle cx="40" cy="8" r="2.6" fill="#fff3c4"/>
+  <!-- midpoint diamond bead -->
+  <rect x="15.9" y="15.9" width="3" height="3" transform="rotate(45 17.4 17.4)" fill="#ffe9a8" stroke="#c9861e" stroke-width=".9"/>
+</svg>

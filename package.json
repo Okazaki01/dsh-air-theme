@@ -1,0 +1,54 @@
+{
+  "name": "@dsh-external/dsh-client-ui-skin-air",
+  "description": "《AIR》夏日青空 — 高定制动漫主题皮肤 for the DeepSeek Harness web GUI. Full-viewport 神尾观铃 (Misuzu) sky backdrop, Q版 mascot sidebar, feather-fall / cloud-drift ambience, magic-circle thinking hook, hot-swappable via dsh-skin-switch.",
+  "version": "0.2.5",
+  "private": true,
+  "type": "module",
+  "main": "lib/index.js",
+  "exports": {
+    ".": "./lib/index.js",
+    "./client": "./lib/client.js",
+    "./skin.json": "./skin.json",
+    "./package.json": "./package.json"
+  },
+  "dsh": {
+    "bundle": {
+      "patch": "./cordis.patch.yml"
+    },
+    "client": {
+      "inject": [],
+      "platform": "web"
+    }
+  },
+  "license": "CC-BY-NC-SA-4.0",
+  "scripts": {
+    "install:skin": "node scripts/install.mjs",
+    "install:dry": "node scripts/install.mjs --dry-run",
+    "doctor": "node scripts/doctor.mjs",
+    "preview": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/make-preview.ps1",
+    "check": "node --check lib/index.js && node --check lib/client.js && node --check scripts/install.mjs && node --check scripts/check-anchors.mjs && node --check scripts/check-release.mjs && node --check scripts/doctor.mjs",
+    "check:release": "node scripts/check-release.mjs",
+    "check:anchors": "node scripts/check-anchors.mjs"
+  },
+  "peerDependencies": {
+    "@deepseek-ai/cordis": "^4.0.1"
+  },
+  "files": [
+    "lib/index.js",
+    "lib/client.js",
+    "cordis.patch.yml",
+    "skin.json",
+    "assets",
+    "preview",
+    "scripts",
+    "安装.bat",
+    "LICENSE",
+    "NOTICE",
+    "README.md",
+    "INSTALL.md",
+    "INSTALL-AI.md",
+    "INSTALL-MANUAL.md",
+    "AGENTS.md",
+    "CHANGELOG.md"
+  ]
+}

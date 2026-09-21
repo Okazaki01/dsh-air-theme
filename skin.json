@@ -1,0 +1,26 @@
+{
+  "id": "air",
+  "name": "AIR·夏日青空",
+  "nameEn": "AIR Summer Sky",
+  "author": "dsh-air-theme",
+  "tagline": "神尾观铃 · 全屏夏日青空 · Q版萌宠侧栏 · 羽毛与星光的沉浸主题",
+  "description": "以 Key 社《AIR》为灵感的动漫主题皮肤：全屏观铃拥抱天空背景（001.png），左侧栏 Q 版观铃剪影，输入框玻璃拟态 + 羽毛摆动装饰，消息区粗体发光日系字体，魔法阵思考动画与羽毛飘落加载动画，樱花旋转设置按钮。通过 dsh-skin-switch 热切换，不修改任何原生功能结构。",
+  "tags": [
+    "anime",
+    "air",
+    "key",
+    "summer",
+    "sky",
+    "feather",
+    "sakura",
+    "glass"
+  ],
+  "accent": "#6db7e8",
+  "bodyAttr": "data-dsh-air",
+  "package": "@dsh-external/dsh-client-ui-skin-air",
+  "wiring": {
+    "id": "ui-skin-air",
+    "bundleWired": false
+  },
+  "order": 6
+}
