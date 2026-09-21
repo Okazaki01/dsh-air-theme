@@ -3,7 +3,7 @@
 以 Key 社《AIR》(2000) 为灵感的 **DeepSeek Harness** 高定制动漫主题皮肤。
 支持皮肤热切换，**不改动任何原生功能与按钮行为**（100% 保留原版窗口布局与按钮行为）。
 
-- **当前版本 v0.2.5** ｜ 下载：**[Releases](https://github.com/qq2992254255-oss/dsh-air-theme/releases/latest)**
+- **当前版本 v0.2.5** ｜ 下载：**[Releases](https://github.com/Okazaki01/dsh-air-theme/releases/latest)**
 - **推荐环境：[DSH-Desktop-EAC](https://github.com/DSH-EAC/DSH-Desktop-EAC)** —— DeepSeek Harness 的桌面端
   （EAC = *Embracing All Creation*「揽尽万象」，自带 Node.js 运行时、一键启动）。
   **本皮肤就是在它上面开发与测试的**，用它的体验最省事。
@@ -19,13 +19,13 @@
 
 | 新会话界面 | 已有会话记录 |
 | :---: | :---: |
-| ![浅色模式 · 新会话界面](https://raw.githubusercontent.com/qq2992254255-oss/dsh-air-theme/main/preview/light-new-session.png) | ![浅色模式 · 已有会话记录](https://raw.githubusercontent.com/qq2992254255-oss/dsh-air-theme/main/preview/light-conversation.png) |
+| ![浅色模式 · 新会话界面](https://raw.githubusercontent.com/Okazaki01/dsh-air-theme/main/preview/light-new-session.png) | ![浅色模式 · 已有会话记录](https://raw.githubusercontent.com/Okazaki01/dsh-air-theme/main/preview/light-conversation.png) |
 
 ### 深色模式
 
 | 新会话界面 | 已有会话记录 |
 | :---: | :---: |
-| ![深色模式 · 新会话界面](https://raw.githubusercontent.com/qq2992254255-oss/dsh-air-theme/main/preview/dark-new-session.png) | ![深色模式 · 已有会话记录](https://raw.githubusercontent.com/qq2992254255-oss/dsh-air-theme/main/preview/dark-conversation.png) |
+| ![深色模式 · 新会话界面](https://raw.githubusercontent.com/Okazaki01/dsh-air-theme/main/preview/dark-new-session.png) | ![深色模式 · 已有会话记录](https://raw.githubusercontent.com/Okazaki01/dsh-air-theme/main/preview/dark-conversation.png) |
 
 ---
 
