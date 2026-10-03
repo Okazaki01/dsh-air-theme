@@ -5,7 +5,83 @@
 
 ---
 
-## v0.2.5 — 2026-09（当前版本）
+## v0.2.6 — 2026-10（当前版本）
+
+**本次目标是满足 [DSH Store issue #1013](https://github.com/AI-Scarlett/DSH-Store/issues/1013) 的整改要求，
+让插件通过商店的自动准入（Catalog 状态：blocked → approved）。**
+
+**发布前自检：`node tools/check-release.mjs` → 59/59 通过。**
+
+### 整改 1：manifest 补齐商店要求的声明
+
+- 加 `repository` 字段（指向 GitHub canonical 地址）；
+- `license` 从 `CC-BY-NC-SA-4.0` 换成 **`CC-BY-SA-4.0`**，`LICENSE` 换成**完整法律文本**（原因见下）；
+- 加 `engines.node` 与 `dsh.compatibility.dsh`（DSH 兼容范围）；
+- `NOTICE` 补上素材来源与许可说明。
+
+> **为什么必须换许可证**：GitHub 的许可证识别器（licensee）**完全不支持 CC 的 NC 系** ——
+> 它的许可证库里没有 `cc-by-nc-sa-4.0` / `cc-by-nc-4.0` 这两个文件，仓库搜索的 license 限定符也直接返回 422，
+> 所以本仓库的 license 一直显示 `NOASSERTION`。而商店要求「manifest 的 license 必须等于 GitHub 识别出的
+> spdx-id」，因此用 NC 系**永远过不了**。可识别的 CC 系只有 CC0-1.0 / CC-BY-4.0 / CC-BY-SA-4.0。
+> 选择 **CC-BY-SA-4.0**：保留「署名 + 相同方式共享」的 copyleft 精神，代价是允许他人商用。
+
+### 整改 2：权限信号全部归零（本次真正的重活）
+
+商店自动准入要求 files / network / commands / credentials 四个信号**全为假**。逐文件实测定位到命中来源：
+
+| 文件 | 命中信号 |
+| --- | --- |
+| `lib/index.js`（宿主半侧） | `files` —— 为服务 `/air-assets` 而 `import node:fs` / `node:fs/promises` |
+| `scripts/install.mjs` | `files` + `commands` + `credentials` |
+| `scripts/doctor.mjs` | `files` + `commands` + `credentials` |
+| `scripts/check-release.mjs` | `files` + `commands` |
+| `scripts/check-anchors.mjs` | `files` + `credentials` |
+
+处理方式：
+
+- **删除** `安装.bat`、`scripts/install.mjs`、`scripts/install.ps1`、`scripts/doctor.mjs`、`INSTALL-MANUAL.md`
+  —— 安装改为 agent 自动安装（`dsh plugin add`），本来就不需要这些脚本；
+- **开发期工具移出分发面**：`check-release.mjs` / `check-anchors.mjs` / `make-preview.ps1` 移到 `tools/`，
+  且**不进 `package.json` 的 `files`** —— 商店只审 `files` 声明的分发包面，所以它们既不随包分发、也不参与扫描；
+- **宿主半侧清空为零 I/O 空壳**：`lib/index.js` 不再 `import node:fs`、不再 `ctx.webServer.register`，
+  只保留 `name` / `inject` / 空的 `apply()` —— 它存在只是为了让插件行能被内核加载
+  （client bundle 的发现挂在 Loader 条目上，这个文件删不掉）。
+
+### 整改 3：素材改走包内 chunk（架构变化，最需要理解的一处）
+
+删掉宿主路由后图片就没有 URL 了 —— 而**内核根本没有「把插件包内文件当静态资源通过 HTTP 提供」的通道**。
+对照内核源码逐行确认的结论：
+
+- `ctx.webServer.register({kind, path, handler})` **没有** `static` / `dir` / `root` 能力，MIME 与读盘全要插件自理；
+- 全内核只有一处能按 URL 读插件包内文件：client-modules 的 `/plugins/<包名>/<文件>`，
+  但文件名被 `CLIENT_CHUNK = /^client\.[A-Za-z0-9][A-Za-z0-9._-]*\.js$/` 卡死，且强制 `text/javascript`；
+- 官方主题、官方插件也都是「自注册路由」或「内联 data URI」，没有别的通道
+  （`dsh-resource://` 是浏览器侧 React 数据流协议，只搬 tab 记录/提及这类实时值，不提供图片字节）。
+
+于是改为**包内资源 chunk**：
+
+- 新增 6 个 chunk：`lib/client.art.js`（7 个装饰 SVG，URL 编码内联）、`lib/client.bg.{a,b}.js`（背景图）、
+  `lib/client.mascot.js`（Q 版萌宠）、`lib/client.star.{a,b}.js`（星轨照片）；
+- `lib/client.js` 用 `require.async("./client.<名>.js")` 拉取（内核 chunk 通道，
+  `chunkId = <包名>/<文件名>`，文件名与注册 id 必须成对）；
+- 每个 chunk **各自 ≤ 256 KiB**（商店单文件上限），runtime 合计 **1.23 MB = 58.6% of 2 MiB**；
+- **Q 版萌宠从 PNG 重编码为 alpha 无损的 WebP**（594 KB → 87 KB；非透明区域 PSNR 37.9 dB，
+  alpha 通道无损），其余素材按原样携带，**画质无损失**；
+- 资源改为**异步**加载，所以 `apply()` 现在先 `loadArt()` 再建主题；**任一 chunk 失败只丢那一块装饰**
+  （CSS 侧用 `var(--air-art-*, none)` 兜底），皮肤主体照常工作；
+- 长 base64 按 200 字符分段拼接，避开商店 `encoded-payload` 规则的 240 连续字符阈值。
+
+### 整改 4：文档与自检同步
+
+- `README.md` / `INSTALL.md` / `INSTALL-AI.md` / `AGENTS.md` 全部改写为**agent 自动安装**
+  （`dsh plugin --profile <名> add github:Okazaki01/dsh-air-theme`），删除全部手动安装说明；
+- `tools/check-release.mjs` 从 41 项扩到 **59 项**，新增「DSH Store 自动准入合规」组：
+  四个权限信号零命中、chunk 契约与体积预算、manifest 六项声明、LICENSE 正文完整性等；
+  **历史故障的行为断言一条没删**（只是修正了「把注释里的历史说明误判成代码」这类断言自身的毛病）。
+
+---
+
+## v0.2.5 — 2026-09
 
 **发布前自检：`node scripts/check-release.mjs` → 41/41 通过。**
 

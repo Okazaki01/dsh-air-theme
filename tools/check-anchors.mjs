@@ -4,9 +4,9 @@
  * dsh-air-theme — 锚点死活检查（对着已安装的内核跑）
  *
  * 用法:
- *   node scripts/check-anchors.mjs
- *   node scripts/check-anchors.mjs --eac-root "A:\DSHapp\Deepseek Harness EAC"
- *   node scripts/check-anchors.mjs --kernel "<...>\dsh-desktop\node_modules\@deepseek-ai"
+ *   node tools/check-anchors.mjs
+ *   node tools/check-anchors.mjs --eac-root "A:\DSHapp\Deepseek Harness EAC"
+ *   node tools/check-anchors.mjs --kernel "<...>\dsh-desktop\node_modules\@deepseek-ai"
  *
  * 为什么需要它：DSH 的界面用 CSS Modules 构建，应用侧类名是 `<hash>_<key>`，
  * `<hash>` 由源码路径派生、随内核版本漂移（见 INSTALL.md 红线 7）。写死哈希的

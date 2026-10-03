@@ -1,7 +1,7 @@
 {
   "name": "@dsh-external/dsh-client-ui-skin-air",
-  "description": "《AIR》夏日青空 — 高定制动漫主题皮肤 for the DeepSeek Harness web GUI. Full-viewport 神尾观铃 (Misuzu) sky backdrop, Q版 mascot sidebar, feather-fall / cloud-drift ambience, magic-circle thinking hook, hot-swappable via dsh-skin-switch.",
-  "version": "0.2.5",
+  "version": "0.2.6",
+  "description": "《AIR》夏日青空 — 高定制动漫主题皮肤 for the DeepSeek Harness web GUI. Full-viewport 神尾观铃 (Misuzu) sky backdrop, Q版 mascot sidebar, feather-fall / cloud-drift ambience, magic-circle thinking hook, hot-swappable via dsh-skin-switch. Self-contained: every ornament and photo ships inside this package's own client chunks, so the skin registers no host route, reads no files and makes no network request of its own.",
   "private": true,
   "type": "module",
   "main": "lib/index.js",
@@ -11,6 +11,30 @@
     "./skin.json": "./skin.json",
     "./package.json": "./package.json"
   },
+  "files": [
+    "lib",
+    "cordis.patch.yml",
+    "skin.json",
+    "LICENSE",
+    "NOTICE",
+    "README.md",
+    "INSTALL.md",
+    "AGENTS.md",
+    "CHANGELOG.md"
+  ],
+  "keywords": [
+    "dsh",
+    "deepseek-harness",
+    "plugin",
+    "skin",
+    "theme",
+    "anime",
+    "air",
+    "key",
+    "summer",
+    "sky",
+    "ui"
+  ],
   "dsh": {
     "bundle": {
       "patch": "./cordis.patch.yml"
@@ -18,37 +42,30 @@
     "client": {
       "inject": [],
       "platform": "web"
+    },
+    "compatibility": {
+      "dsh": ">=0.1.5-alpha.1 <0.3.0"
     }
   },
-  "license": "CC-BY-NC-SA-4.0",
+  "engines": {
+    "node": ">=18"
+  },
+  "license": "CC-BY-SA-4.0",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Okazaki01/dsh-air-theme.git"
+  },
+  "homepage": "https://github.com/Okazaki01/dsh-air-theme#readme",
+  "bugs": {
+    "url": "https://github.com/Okazaki01/dsh-air-theme/issues"
+  },
   "scripts": {
-    "install:skin": "node scripts/install.mjs",
-    "install:dry": "node scripts/install.mjs --dry-run",
-    "doctor": "node scripts/doctor.mjs",
-    "preview": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/make-preview.ps1",
-    "check": "node --check lib/index.js && node --check lib/client.js && node --check scripts/install.mjs && node --check scripts/check-anchors.mjs && node --check scripts/check-release.mjs && node --check scripts/doctor.mjs",
-    "check:release": "node scripts/check-release.mjs",
-    "check:anchors": "node scripts/check-anchors.mjs"
+    "check": "node tools/check-release.mjs",
+    "check:syntax": "node tools/check-release.mjs --syntax-only",
+    "check:anchors": "node tools/check-anchors.mjs",
+    "preview": "powershell -NoProfile -ExecutionPolicy Bypass -File tools/make-preview.ps1"
   },
   "peerDependencies": {
     "@deepseek-ai/cordis": "^4.0.1"
-  },
-  "files": [
-    "lib/index.js",
-    "lib/client.js",
-    "cordis.patch.yml",
-    "skin.json",
-    "assets",
-    "preview",
-    "scripts",
-    "安装.bat",
-    "LICENSE",
-    "NOTICE",
-    "README.md",
-    "INSTALL.md",
-    "INSTALL-AI.md",
-    "INSTALL-MANUAL.md",
-    "AGENTS.md",
-    "CHANGELOG.md"
-  ]
+  }
 }

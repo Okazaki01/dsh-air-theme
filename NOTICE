@@ -1,8 +1,19 @@
 dsh-air-theme — 《AIR》夏日青空
+Copyright (C) 2026 Okazaki01
 
 - 《AIR》is a visual novel by Key / Visual Art's. This theme is an unofficial
   fan-made UI skin; it is not affiliated with or endorsed by Key.
-- The background image (001.png) and Q-version character (Q版角色.png) are
-  user-provided input materials, used locally by this skin only.
+- Artwork: the sky backdrop, the Q-version mascot, the sakura branch and the
+  star-trail photo are the author's own input materials for this skin. The
+  repository keeps the untouched originals under `assets/` as source material;
+  what actually ships to the browser lives in this package's own client chunks
+  (`lib/client.art.js`, `lib/client.bg.*.js`, `lib/client.mascot.js`,
+  `lib/client.star.*.js`) — the mascot is re-encoded to lossless-alpha WebP,
+  the rest are carried as-is.
 - All decorative artwork (feathers, sakura, stars, birds, ripples, favicon)
   is original inline SVG generated for this skin.
+- Licence: this whole package — code and artwork alike — is released under
+  Creative Commons Attribution-ShareAlike 4.0 International (CC-BY-SA-4.0).
+  See LICENSE for the full legal text. You may share and adapt it, including
+  commercially, as long as you give appropriate credit and distribute your
+  contributions under the same licence.

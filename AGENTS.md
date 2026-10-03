@@ -1,15 +1,17 @@
 # AGENTS.md — AI 安装代理执行清单（30 秒速查）
 
 本文件是给 AI 模型（安装代理 / 代码代理）的精简执行清单。完整说明见 **INSTALL.md**，
-版本改动记录见 **CHANGELOG.md**。当前版本 **v0.2.5**。
+版本改动记录见 **CHANGELOG.md**。当前版本 **v0.2.6**。
 
 ## 拿到包先跑这一条
 
 ```bash
-node scripts/check-release.mjs   # 41 项，必须全 OK；FAIL 就是坏包，别装也别转发
-node scripts/doctor.mjs          # 环境体检：本机有哪些 profile、在跑哪个、皮肤装没装、下一步做什么
-node scripts/check-anchors.mjs   # 对着已装内核判锚点死活，退出码 0
+node tools/check-release.mjs    # 59 项，必须全 OK；FAIL 就是坏包，别装也别转发
+node tools/check-anchors.mjs    # 对着已装内核判锚点死活，退出码 0
 ```
+
+> `tools/` 是**开发期工具，不随包分发**（`package.json` 的 `files` 里没有它）。
+> 从 GitHub 拿到的完整仓库里有；只拿到分发包时跳过这两条即可。
 
 ## 环境适配（重要：不要假定是 EAC）
 
@@ -18,91 +20,72 @@ node scripts/check-anchors.mjs   # 对着已装内核判锚点死活，退出码
 「装进某个 profile + 该 profile 有启用行 + 宿主重启过」这三件事。
 
 **profile 名不是固定的**（EAC 用 `web-desktop`，纯网页版通常是 `web`），所以
-**不要硬编码**。安装脚本会按可信度自动判定并在输出里写明依据：
-`--profile` 参数 → `DSH_DESKTOP_PROFILE` 环境变量 → **正在运行的 dsh 进程命令行** →
-profiles 下唯一的目录 → 常见名兜底；判不出来就列候选并要求显式指定。
+**不要硬编码**。先列 `~/.dsh/profiles/` 下的目录，或看正在运行的 dsh 进程命令行。
 
 **推荐环境：[DSH-Desktop-EAC](https://github.com/DSH-EAC/DSH-Desktop-EAC)** —— DeepSeek Harness 的桌面端
 （EAC = *Embracing All Creation*「揽尽万象」，自带 Node.js 运行时、一键启动）。**本皮肤就是在它上面开发与
-测试的**，下表第一行就是它。给别人介绍 / 写说明时优先推荐它；但**代码与脚本仍必须假定"不一定是 EAC"**。
+测试的**。给别人介绍时优先推荐它；但**代码与文档仍必须假定"不一定是 EAC"**。
 
-| 环境 | 安装 | 生效 |
-| --- | --- | --- |
-| **EAC 桌面端（推荐）** | `node scripts/install.mjs` / 双击 `安装.bat` | 完全退出（含托盘）再打开 |
-| 纯网页版 `dsh web` | `node scripts/install.mjs --profile web` | 结束并重跑 `dsh web`，再刷新页面 |
-| 其它桌面端 | `node scripts/install.mjs --profile <名>` | 重启该客户端 |
-| 桌面端目录不认识 | 追加 `--eac-root "D:\目录"` | 重启该客户端 |
-| 只装 profile | 追加 `--no-eac` | 重启宿主 |
-
-- 指定了非桌面壳的 profile 时，脚本会**自动跳过桌面壳的 `assets/skins`**，防止串台。
-- 桌面壳专属的只有「标题栏配色」一条规则，写成 `:is([class*=titlebar],#__dsh_desktop_chrome__,…)`，
-  匹配不到就整条不生效、不报错；其余锚点都是内核级契约。别把这条改成无兜底的硬绑定。
-- **装完没生效，第一步永远是 `node scripts/doctor.mjs`**，它会指出卡在哪一步
-  （没装 / 没启用行 / 被禁用 / 入口坏了 / 只是没重启）。
-
-## 小白场景（对方不会装、你没有视觉 API）— 也完全可行
-
-- **安装不依赖任何外部 API / 视觉模型**：只是复制文件 + 写一行启用配置。
-- 让用户双击包内 **`安装.bat`**（Windows 自带 PowerShell，无需 Node），按窗口提示重启即可；
-  **确认生效靠"看屏幕"**。
-- 你（AI）的验证 = 安装脚本输出全绿 + 用户口述下面几条（v0.2.3 / v0.2.4 / v0.2.5 专门修的那几处）
-  + 背景/右下角提示。**全程不需要截图理解能力。**
-
-## 安装（有 Node 时照抄执行）
+## 安装（agent 自动安装，一步到位）
 
 ```bash
-# 0) 前置：包根目录、node ≥ 18
-npm run check
+# 前置：Node ≥ 18
+# 装进目标 profile（幂等；--profile 是 plugin 子命令的必需参数）
+dsh plugin --profile <profile名> add github:Okazaki01/dsh-air-theme
 
-# 1) 一键安装（幂等；profile 自动判定，输出里会写明依据）
-node scripts/install.mjs
+# 从本地目录装（离线 / 改过源码时）
+dsh plugin --profile <profile名> add <本包目录>
 
-# 纯网页版 / 其它桌面端：显式指定 profile
-node scripts/install.mjs --profile web
-# 桌面端目录不认识时：
-node scripts/install.mjs --eac-root "D:\某桌面端目录"
-
-# 小白电脑无 Node: 让用户双击 安装.bat（等价，PowerShell 实现）
+# 从已上架的商店装：设置 → 插件市场 → 搜「AIR 夏日青空」
 ```
+
+**没有一键安装脚本了（v0.2.6 起删除）。** 安装就是 `dsh plugin add`（底层 pnpm），
+启用行由 `cordis.patch.yml` 自动插入 —— 不再有 `安装.bat` / `install.mjs` / `doctor.mjs`。
+删掉它们是为了让包的运行时源码**零 `node:fs`、零 `child_process`、零 `process.env`**，
+从而通过 DSH Store 的自动准入（files / network / commands / credentials 四个权限信号必须全空）。
 
 ## 生效（不是「Ctrl+R」，也不是「只有 EAC 才行」）
 
-- **首次安装 / 新增皮肤行：必须让宿主进程重启一次。** 宿主启动时读取 `cordis.patch.yml`，
+- **首次安装 / 新增皮肤行：必须让宿主进程重启一次。** 宿主启动时读取启用配置，
   并把每行插件的客户端 bundle 一次性读进内存后以 immutable 提供 —— 浏览器 Ctrl+R
   **加载不了新行**。
   - 桌面端（EAC 等）：完全退出（含托盘）再打开；
   - 纯网页版：结束进程并重新执行 `dsh web`，再刷新浏览器页面。
-- **行已存在、只改了 `lib/client.js`：不用重启。** `dsh-client-hmr` 每 500ms 轮询 bundle，
+- **行已存在、只改了 `lib/*.js`：不用重启。** `dsh-client-hmr` 每 500ms 轮询 bundle，
   内容变了就经 SSE 推给浏览器热重载（这就是日常二次开发的迭代方式）。
-- 无需强制去设置点皮肤：patch 行默认启用，重启即生效；**没生效才**引导 设置 → 皮肤 →「AIR·夏日青空」。
+- 无需强制去设置点皮肤：启用行默认启用，重启即生效；**没生效才**引导 设置 → 皮肤 →「AIR·夏日青空」。
 
 ## 验证（无视觉 API 版本）
 
-- 安装脚本 4 步全绿无报错
-- `node scripts/check-release.mjs` 41/41；`node scripts/check-anchors.mjs` 退出码 0
-- 用户口述 ①：背景是观铃夏日青空图（**深色模式下也要在**）+ 右下角出现「AIR·夏日青空 主题已生效 ✓ v0.2.5」
+- `node tools/check-release.mjs` 59/59；`node tools/check-anchors.mjs` 退出码 0
+- 用户口述 ①：背景是观铃夏日青空图（**深色模式下也要在**）+ 右下角出现「AIR·夏日青空 主题已生效 ✓ v0.2.6」
 - 用户口述 ②：**左上角有金色 `deepseek`，右边紧跟深蓝胶囊里的白色 `HARNESS`**（两个都要在）
 - 用户口述 ③：新会话界面小鲸鱼旁有「将未完的夏天，寄往天空的尽头」，**两者在同一水平线上**
 - 用户口述 ④：有消息的会话里**滚到最底部继续滚、再往上滚回看历史，输入框全程不动**
 - 用户口述 ⑤：**新会话界面输入框在窗口中间偏下**（不是贴底），小鲸鱼/文案/预览版仍在同一条水平线上
 - 用户口述 ⑥：鼠标移到模型输出框底下的小按钮（复制/分享）上，**黑色悬停提示完整可见**，没有被输入框挡住或切掉
 - 用户操作口述：打开技能/模型折叠菜单，内容完整可见，未被 DSHapp / Router Standard 两个小按钮盖住
-- 用户口述 ⑦（v0.2.4）：**完全退出再打开**（冷启动）后进新会话界面，小鲸鱼/文字横幅/预览版贴标
+- 用户口述 ⑦（v0.2.4 修的）：**完全退出再打开**（冷启动）后进新会话界面，小鲸鱼/文字横幅/预览版贴标
   **仍然同一条水平线、位置正确** —— 旧版只有「热重载后正常」的假象，冷启动必错位
-- 用户口述 ⑧（v0.2.5）：**深色模式下背景图也在**（能看到观铃那张夏日青空图），不是一片纯黑；
-  浅色模式下同样在 —— 这条同样**必须冷启动后看**（旧版是「热重载后有、冷启动没有」）
+- 用户口述 ⑧（v0.2.5 修的）：**深色模式下背景图也在**（能看到观铃那张夏日青空图），不是一片纯黑；
+  浅色模式下同样在 —— 这条同样**必须冷启动后看**
 - 有视觉 API 时可选增强：截图核对 README 特性表（不是安装前提）
 
 ## 红线（改代码时）
 
 1. **禁止 PowerShell 写 `lib/client.js`**（UTF-8 损坏）；改后 `node --check`。
-2. 改任何文件后必须重跑 `node scripts/install.mjs`（保持 src / EAC assets / profile 三处一致）。
+2. 改完必须重跑 `npm run check:release`（59 项）。装进 profile 的副本由 `dsh plugin add` 从来源同步 ——
+   **改了文件要按同一来源重装一次**（幂等），否则 profile 里还是旧副本。
 3. 不恢复旧 bug：卡片内无大金角饰；`heroWorkspaceRow` 保持 `z-index:0!important`；
    `dockChips()` 保持卡片外定位（`top = card.top - stack.top - 42`）；
    `composerSeat` hero 态 `z-index:0`；`[data-conversation-composer-overlay]{z-index:60}`。
 4. 全部 CSS 作用域 `body[data-dsh-air]`；贡献走 `ctx.effect()`；装饰须 `pointer-events:none`
    （含右下角激活提示 `data-air-chrome=ready-badge`，绝不能拦截点击）。
-5. 资产走 `/air-assets` 路由，勿改前缀与防穿越校验。
+5. **资产走包内 chunk，不要引入宿主侧路由或 `node:fs`。** 每个 chunk 的文件名与注册 id
+   **必须成对**：文件 `lib/client.<名>.js` ↔ 内部 `id: "<包名>/client.<名>.js"`（内核
+   `CLIENT_CHUNK` 白名单 + `chunkId = <ownerId>/<fileName>`）。只在 `lib/client.js` 里用
+   `require.async("./client.<名>.js")` 拉取，**不要**改调用形式（内核只认 `./` 开头的 `client.*.js`）。
+   宿主半侧 `lib/index.js` 必须保持零 I/O 空壳。
 6. **绝不硬编码 CSS Modules 哈希前缀**。应用侧类名是 `<hash>_<key>`，`<hash>` 随内核构建漂移
    （0.1.0 = `wSkVaW_*`，0.1.2 = `XPOEOG_*` / `_7mhE3G_*`）。写死哈希 → 规则静默全失效
    （v0.1.1 的侧栏、标题胶囊、选项卡、输入框底部信息行就是这样挂掉的）。改用：
@@ -111,7 +94,7 @@ node scripts/install.mjs --eac-root "D:\某桌面端目录"
      由 `resolveCssTokens()` 从 `<style data-plugin-css="…/Xxx.module.css">` 运行时解析。
    - 壳标题栏是 id `#__dsh_desktop_chrome__`（不是 class）；占位符是 `[data-composer-placeholder]`
      （不是 `textarea::placeholder`）。
-   - 改完必须 `node scripts/check-anchors.mjs` 通过（退出码 0）。
+   - 改完必须 `node tools/check-anchors.mjs` 通过（退出码 0）。
 7. **令牌只能进 CSS，不能进 JS。** `__AIRMOD()__` / `__AIRSIDEBAR__` / `__AIRTITLEBAR__`
    由 `resolveCssTokens()` 替换；写进 `querySelector` / `querySelectorAll` / `closest` 会抛
    `SyntaxError` 并**中断整个 `apply()`**（observer / 占位符 / busy / 拆除 effect 全丢）。
@@ -158,7 +141,6 @@ node scripts/install.mjs --eac-root "D:\某桌面端目录"
          外加 30 秒慢轮询兜底，全部就绪后 `stopWatching()`（拆除时也要断开，不留残留观察器）。
     - **任何新增的两段式令牌**（`__AIRMOD(file|key)`，没有第三段兜底）都会重演这个坑：
       要么补上第三段兜底，要么确认它依赖的模块在冷启动时**一定**已在 DOM 里。
-    - 改完必须 `npm run check:release`（有 2 条断言专门守这个坑）。
 15. **与内核"同权重"的变量/规则必须加 `!important` 或提权重（v0.2.5 修的坑）**
     - **同一个指纹的第二种成因**：热重载会**销毁旧 `<style>`、新建一个并追加到 `<head>` 末尾**，
       而冷启动时皮肤表在前面 —— 于是**同权重的规则「谁后插谁赢」**，两者结果不一样。
@@ -173,16 +155,15 @@ node scripts/install.mjs --eac-root "D:\某桌面端目录"
 
 ## 交付前自查（打包发出前逐条打勾）
 
-- [ ] `npm run check` —— 全部 JS `node --check` 通过
-- [ ] `npm run check:release` —— **41/41 全 OK**（七类历史故障的修复都在）
+- [ ] `npm run check:release` —— **59/59 全 OK**（含商店自动准入合规组）
 - [ ] `npm run check:anchors` —— 退出码 0（锚点对着已装内核全活）
 - [ ] `grep -n "__AIRSIDEBAR__\|__AIRMOD(" lib/client.js` 的结果**全部落在 CSS 数组内或注释里**
-- [ ] `node scripts/install.mjs` 执行成功（三处副本 hash 一致、stamp 借壳计算）
-- [ ] **不假定 EAC**：README / INSTALL.md / INSTALL-MANUAL.md / INSTALL-AI.md 里都写清
-      纯网页版与其它桌面端怎么装、怎么生效；`--profile` 未被硬编码成 `web-desktop`
 - [ ] `package.json` 与 `lib/client.js` 的 `SKIN_VERSION` 版本号一致
+- [ ] `LICENSE` 是 CC-BY-SA-4.0 完整法律文本，`package.json` 的 `license` 字段与之一致
+- [ ] `manifest.files` 里**不含** `tools/`、`assets/`、`preview/`（开发脚本与源素材不进分发面）
+- [ ] 四个权限信号（files / network / commands / credentials）保持零命中
+- [ ] **不假定 EAC**：README / INSTALL.md / INSTALL-AI.md 里都写清纯网页版与其它桌面端怎么装、怎么生效
 - [ ] CHANGELOG.md 已记录本次改动
-- [ ] 用户侧确认七条：右下角 ✓ 提示 + 青空背景（**深色模式也要有**）+ 左上角 deepseek/HARNESS 都在
-      + 新会话标题与小鲸鱼齐平 + 滚轮滚动时输入框不动
-      + 新会话输入框居中偏下（不贴底）+ 小按钮悬停提示完整可见
-      + **冷启动（完全退出再打开）后新会话三件套位置仍正确**（v0.2.4）
+- [ ] 用户侧确认八条：右下角 ✓ 提示 + 青空背景（**深色模式也要有**）+ 左上角 deepseek/HARNESS 都在
+      + 新会话标题与小鲸鱼齐平 + 滚轮滚动时输入框不动 + 新会话输入框居中偏下（不贴底）
+      + 小按钮悬停提示完整可见 + **冷启动后新会话三件套位置仍正确**（v0.2.4）
